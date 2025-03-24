@@ -27,7 +27,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.jessyan.autosize.utils.AutoSizeUtils;
 
@@ -123,6 +125,12 @@ public class ApiDialog extends BaseDialog {
                 }
                 // Capture oroxy server input into Settings
                 Hawk.put(HawkConfig.PROXY_SERVER, newProxyServer);
+
+                // guhill1
+                // 获取 sourceIndexMap
+                Map<Integer, Integer> sourceIndexMap = Hawk.get(HawkConfig.LIVE_CHANNEL_SOURCE_INDEX_MAP, new HashMap<>());
+                sourceIndexMap.clear(); // 清空 map 中的所有条目
+                Hawk.put(HawkConfig.LIVE_CHANNEL_SOURCE_INDEX_MAP, sourceIndexMap);
             }
         });
         findViewById(R.id.apiHistory).setOnClickListener(new View.OnClickListener() {

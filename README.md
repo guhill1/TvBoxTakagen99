@@ -1,16 +1,6 @@
-# Box
+# TVBox gtking 专版(源自Takagen99) (也可能适用其它机型)
+1) 修复TVBox在 gtking (pro) 上飞鼠(鼠标)点击频道,再点击分组闪退的错误(先不移动上下左右箭头).  
+2) 增加为每个频道记住上次选源设置的功能,播放时自动恢复.
+3) 增加频道,分组菜单点击为自动激活. 
+4) 增加设置菜单,分组点击为自动激活.  
 
-=== Source Code - Editing the app default settings ===
-/src/main/java/com/github/tvbox/osc/base/App.java
-
-    private void initParams() { 
-
-        putDefault(HawkConfig.HOME_REC, 2);       // Home Rec 0=豆瓣, 1=推荐, 2=历史
-        putDefault(HawkConfig.PLAY_TYPE, 1);      // Player   0=系统, 1=IJK, 2=Exo
-        putDefault(HawkConfig.IJK_CODEC, "硬解码");// IJK Render 软解码, 硬解码
-        putDefault(HawkConfig.HOME_SHOW_SOURCE, true);  // true=Show, false=Not show
-        putDefault(HawkConfig.HOME_NUM, 2);       // History Number
-        putDefault(HawkConfig.DOH_URL, 2);        // DNS
-        putDefault(HawkConfig.SEARCH_VIEW, 2);    // Text or Picture
-
-    }

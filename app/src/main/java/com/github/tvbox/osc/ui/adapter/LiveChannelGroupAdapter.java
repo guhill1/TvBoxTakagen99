@@ -1,6 +1,7 @@
 package com.github.tvbox.osc.ui.adapter;
 
 import android.graphics.Color;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -27,6 +28,11 @@ public class LiveChannelGroupAdapter extends BaseQuickAdapter<LiveChannelGroup, 
 
     @Override
     protected void convert(BaseViewHolder holder, LiveChannelGroup item) {
+        // fetch itemView
+        View itemView = holder.itemView;
+        // set itemView touchable and focusable
+        itemView.setFocusableInTouchMode(true);
+
         TextView tvGroupName = holder.getView(R.id.tvChannelGroupName);
         tvGroupName.setText(item.getGroupName());
         int groupIndex = item.getGroupIndex();

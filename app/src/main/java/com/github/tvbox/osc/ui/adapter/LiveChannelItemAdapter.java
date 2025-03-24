@@ -1,6 +1,7 @@
 package com.github.tvbox.osc.ui.adapter;
 
 import android.graphics.Color;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -26,6 +27,11 @@ public class LiveChannelItemAdapter extends BaseQuickAdapter<LiveChannelItem, Ba
 
     @Override
     protected void convert(BaseViewHolder holder, LiveChannelItem item) {
+        // fetch itemView
+        View itemView = holder.itemView;
+        // set itemView touchable and focusable
+        itemView.setFocusableInTouchMode(true);
+
         TextView tvChannelNum = holder.getView(R.id.tvChannelNum);
         TextView tvChannel = holder.getView(R.id.tvChannelName);
         tvChannelNum.setText(String.format("%s", item.getChannelNum()));

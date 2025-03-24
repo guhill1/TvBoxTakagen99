@@ -73,6 +73,9 @@ public class HawkConfig {
     public static final String LIVE_SKIP_PASSWORD = "live_skip_password";
     public static final String LIVE_PLAYER_TYPE = "live_player_type"; // 0 系统 1 ijk 2 exo
 
+    // guhill1 为每个频道保存上一次源
+    public static final String LIVE_CHANNEL_SOURCE_INDEX_MAP = "live_channel_source_index_map";
+
     public static boolean isDebug() {
         return Hawk.get(DEBUG_OPEN, false);
     }
