@@ -46,22 +46,7 @@ public class ApiDialog extends BaseDialog {
     private final EditText inputLive;
     private final EditText inputEPG;
     private final EditText inputProxy;
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(RefreshEvent event) {
-        if (event.type == RefreshEvent.TYPE_API_URL_CHANGE) {
-            inputApi.setText((String) event.obj);
-        }
-        if (event.type == RefreshEvent.TYPE_LIVE_URL_CHANGE) {
-            inputLive.setText((String) event.obj);
-        }
-        if (event.type == RefreshEvent.TYPE_EPG_URL_CHANGE) {
-            inputEPG.setText((String) event.obj);
-        }
-        if (event.type == RefreshEvent.TYPE_PROXYS_CHANGE) {
-            inputProxy.setText((String) event.obj);
-        }
-    }
+    OnListener listener = null;
 
     public ApiDialog(@NonNull @NotNull Context context) {
         super(context);
@@ -100,11 +85,15 @@ public class ApiDialog extends BaseDialog {
                     if (history.size() > 20)
                         history.remove(20);
                     Hawk.put(HawkConfig.API_HISTORY, history);
+
                     listener.onchange(newApi);
                     dismiss();
                 }
+
+                // guhill1 后面统一处理
                 // Capture Live input into Settings & Live History (max 20)
-                Hawk.put(HawkConfig.LIVE_URL, newLive);
+                // Hawk.put(HawkConfig.LIVE_URL, newLive);
+
                 if (!newLive.isEmpty()) {
                     ArrayList<String> liveHistory = Hawk.get(HawkConfig.LIVE_HISTORY, new ArrayList<String>());
                     if (!liveHistory.contains(newLive))
@@ -127,10 +116,16 @@ public class ApiDialog extends BaseDialog {
                 Hawk.put(HawkConfig.PROXY_SERVER, newProxyServer);
 
                 // guhill1
-                // 获取 sourceIndexMap
-                Map<Integer, Integer> sourceIndexMap = Hawk.get(HawkConfig.LIVE_CHANNEL_SOURCE_INDEX_MAP, new HashMap<>());
-                sourceIndexMap.clear(); // 清空 map 中的所有条目
-                Hawk.put(HawkConfig.LIVE_CHANNEL_SOURCE_INDEX_MAP, sourceIndexMap);
+                // 根据需要清理sourceIndexMap,不相等才清理,增加livepiUrl
+                String currentLive = Hawk.get(HawkConfig.LIVE_URL, "");
+                if (!newLive.equals(currentLive)) {
+                    inputLive.setText(newLive);
+                    Hawk.put(HawkConfig.LIVE_URL, newLive);
+
+                    Map<Integer, Integer> sourceIndexMap = Hawk.get(HawkConfig.LIVE_CHANNEL_SOURCE_INDEX_MAP, new HashMap<>());
+                    sourceIndexMap.clear();
+                    Hawk.put(HawkConfig.LIVE_CHANNEL_SOURCE_INDEX_MAP, sourceIndexMap);
+                }
             }
         });
         findViewById(R.id.apiHistory).setOnClickListener(new View.OnClickListener() {
@@ -177,7 +172,10 @@ public class ApiDialog extends BaseDialog {
                     @Override
                     public void click(String liveURL) {
                         inputLive.setText(liveURL);
-                        Hawk.put(HawkConfig.LIVE_URL, liveURL);
+
+                        // guhill1
+                        // 移除这里的设置,统一在确定键里面设置
+                        // Hawk.put(HawkConfig.LIVE_URL, liveURL);
                         dialog.dismiss();
                     }
 
@@ -249,6 +247,22 @@ public class ApiDialog extends BaseDialog {
         refreshQRCode();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refresh(RefreshEvent event) {
+        if (event.type == RefreshEvent.TYPE_API_URL_CHANGE) {
+            inputApi.setText((String) event.obj);
+        }
+        if (event.type == RefreshEvent.TYPE_LIVE_URL_CHANGE) {
+            inputLive.setText((String) event.obj);
+        }
+        if (event.type == RefreshEvent.TYPE_EPG_URL_CHANGE) {
+            inputEPG.setText((String) event.obj);
+        }
+        if (event.type == RefreshEvent.TYPE_PROXYS_CHANGE) {
+            inputProxy.setText((String) event.obj);
+        }
+    }
+
     private void refreshQRCode() {
         String address = ControlManager.get().getAddress(false);
         tvAddress.setText(String.format("手机/电脑扫描上方二维码或者直接浏览器访问地址\n%s", address));
@@ -258,8 +272,6 @@ public class ApiDialog extends BaseDialog {
     public void setOnListener(OnListener listener) {
         this.listener = listener;
     }
-
-    OnListener listener = null;
 
     public interface OnListener {
         void onchange(String api);
