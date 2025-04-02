@@ -116,7 +116,7 @@ public class ApiDialog extends BaseDialog {
                 Hawk.put(HawkConfig.PROXY_SERVER, newProxyServer);
 
                 // guhill1
-                // 根据需要清理sourceIndexMap,不相等才清理,增加livepiUrl
+                // 根据需要清理sourceIndexMap,不相等才清理,增加liveApiUrl
                 String currentLive = Hawk.get(HawkConfig.LIVE_URL, "");
                 if (!newLive.equals(currentLive)) {
                     inputLive.setText(newLive);
